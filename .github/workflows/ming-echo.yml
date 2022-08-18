@@ -1,0 +1,30 @@
+
+
+name: Java CI with Gradle
+
+on:
+  workflow_call:
+    inputs:
+      username:
+        required: true
+        type: string
+
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+    - name: Set Gradle permission
+      run: chmod +x ./gradlew
+
+    # build gradle -> no daemon, parallel 설정 추가
+    - name: Build with Gradle
+      run: ./gradlew clean build bootJar -x test --no-daemon --parallel
